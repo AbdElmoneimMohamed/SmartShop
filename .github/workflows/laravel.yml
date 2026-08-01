@@ -1,0 +1,143 @@
+name: CI
+
+on:
+  push:
+
+env:
+  DB_PORT: 5432
+  DB_USERNAME: postgres
+  DB_PASSWORD: postgres
+  DB_DATABASE: laravel_test
+jobs:
+  build:
+    name: "Build and Test"
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgis/postgis:15-3.4
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: laravel_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: "checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "cache PHP setup"
+        uses: actions/cache@v4
+        with:
+          path: |
+            /tmp/setup-php-cache
+            ~/.composer/cache
+          key: ${{ runner.os }}-php-8.4-setup-${{ hashFiles('.github/workflows/laravel.yml') }}
+          restore-keys: ${{ runner.os }}-php-8.4-setup-
+
+      - name: "setup PHP 8.4"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          tools: composer:v2
+          coverage: xdebug
+        env:
+          SETUP_PHP_CACHE: true
+
+      - name: "get composer cache directory"
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: "create auth.json file"
+        run: |
+          echo '{
+            "http-basic": {
+              "composer.fluxui.dev": {
+                "username": "${{ secrets.FLUX_COMPOSER_USERNAME }}",
+                "password": "${{ secrets.FLUX_COMPOSER_PASSWORD }}"
+              }
+            }
+          }' > auth.json
+
+      - name: "cache dependencies"
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: "install dependencies"
+        run: composer install --prefer-dist
+
+      - name: "run composer license checker"
+        run: ./vendor/bin/composer-license-checker
+
+      - name: "run pint"
+        run: php ./vendor/bin/pint --test
+
+      - name: "setup node v22.20.0"
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.20.0
+          cache: "npm"
+
+      - name: "install node dependencies"
+        run: npm ci
+
+      - name: "run blade formatter"
+        run: './node_modules/.bin/blade-formatter "./resources/**/*.blade.php" -c -d'
+
+      - name: "run PHPStan"
+        run: php ./vendor/bin/phpstan analyse
+
+      - name: "copy .env.example to .env"
+        run: cp .env.example .env
+
+      - name: "set the application key"
+        run: php artisan key:generate
+
+      - name: "run artisan migrate"
+        run: php artisan migrate
+
+      - name: "cache built assets"
+        uses: actions/cache@v4
+        with:
+          path: public/build
+          key: ${{ runner.os }}-build-${{ hashFiles('resources/**/*', 'package-lock.json', 'vite.config.js') }}
+          restore-keys: ${{ runner.os }}-build-
+
+      - name: "build assets"
+        run: npm run build
+      - name: "install playwright"
+        run: npx playwright install
+
+      - name: "run tests with coverage enforcement"
+        run: ./vendor/bin/pest --parallel --coverage
+
+      - name: "run artisan config:cache"
+        run: php artisan config:cache
+
+      - name: "run artisan event:cache"
+        run: php artisan event:cache
+
+      - name: "run artisan route:cache"
+        run: php artisan route:cache
+
+      - name: "run artisan view:cache"
+        run: php artisan view:cache
+
+      - name: "run artisan optimize"
+        run: php artisan optimize
+  # deploy:
+  #   name: "deploy"
+  #   needs: [build]
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main'
+  #   steps:
+  #     - name: "Hit deploy URL"
+  #       run: curl -X POST -d '' https://forge.laravel.com/servers/${GITHUB_FORGE_SERVER}/sites/${GITHUB_FORGE_SITE}/deploy/http?token=${GITHUB_FORGE_TOKEN}

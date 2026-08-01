@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use App\Concerns\LogsModelActivity;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class {{ class }} extends Model
+{
+    /** @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\{{ class }}Factory> */
+    use HasFactory, LogsModelActivity;
+
+    protected $guarded = ['id', 'created_at', 'updated_at'];
+}

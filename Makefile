@@ -30,6 +30,8 @@ local-setup:
 	$(SAIL) artisan key:generate
 	$(SAIL) artisan storage:link
 	make migrate
+	make npm-install
+	make npm-build
 
 migrate:
 	$(SAIL) artisan migrate:fresh --seed
@@ -43,6 +45,16 @@ clear:
 	$(SAIL) artisan optimize:clear
 	$(SAIL) artisan route:clear
 
+# Frontend --------------------------------------------------------------------#
+npm-install: ## Installs frontend dependencies
+	$(SAIL) npm install
+
+npm-build: ## Builds frontend assets for production
+	$(SAIL) npm run build
+
+npm-dev: ## Runs Vite in dev mode with hot-reload
+	$(SAIL) npm run dev
+
 # Quality gate ------------------------------------------------------------- #
 test: ## Runs the full quality + test suite (Pint, PHPStan, Blade Formatter, Pest)
 	$(SAIL) composer test
@@ -53,4 +65,4 @@ pint: ## Fixes code style with Pint
 stan: ## Runs PHPStan static analysis
 	$(SAIL) php $(BIN)/phpstan analyse --xdebug
 
-.PHONY: start stop down rebuild ssh restart local-setup migrate seed clear test pint stan
+.PHONY: start stop down rebuild ssh restart local-setup migrate seed clear npm-install npm-build npm-dev test pint stan

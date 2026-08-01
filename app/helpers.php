@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
+use App\Modules\Auth\Models\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Support\Facades\Auth;

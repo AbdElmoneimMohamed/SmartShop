@@ -19,11 +19,11 @@
 
             <div class="flex flex-col gap-2">
                 <label
-                    class="text-sm font-medium text-neutral-700 dark:text-neutral-300"
+                    class="text-sm font-medium text-neutral-700"
                     for="email"
                 >{{ __('Email address') }}</label>
                 <input
-                    class="focus:outline-hidden w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-neutral-500 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white"
+                    class="focus:outline-hidden w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-neutral-500"
                     id="email"
                     name="email"
                     type="email"
@@ -40,11 +40,11 @@
 
             <div class="flex flex-col gap-2">
                 <label
-                    class="text-sm font-medium text-neutral-700 dark:text-neutral-300"
+                    class="text-sm font-medium text-neutral-700"
                     for="password"
                 >{{ __('Password') }}</label>
                 <input
-                    class="focus:outline-hidden w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-neutral-500 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white"
+                    class="focus:outline-hidden w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-neutral-500"
                     id="password"
                     name="password"
                     type="password"
@@ -57,9 +57,9 @@
                 @enderror
             </div>
 
-            <label class="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+            <label class="flex items-center gap-2 text-sm text-neutral-600">
                 <input
-                    class="rounded border-neutral-300 dark:border-neutral-700"
+                    class="rounded border-neutral-300"
                     name="remember"
                     type="checkbox"
                 >
@@ -67,7 +67,7 @@
             </label>
 
             <button
-                class="w-full rounded-lg bg-neutral-900 px-4 py-2 text-sm font-semibold text-white hover:bg-neutral-700 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+                class="w-full rounded-lg bg-neutral-900 px-4 py-2 text-sm font-semibold text-white hover:bg-neutral-700"
                 data-test="login-button"
                 type="submit"
             >
@@ -76,10 +76,10 @@
         </form>
 
         @if (Route::has('register'))
-            <div class="text-center text-sm text-neutral-600 dark:text-neutral-400">
+            <div class="text-center text-sm text-neutral-600">
                 <span>{{ __('Don\'t have an account?') }}</span>
                 <a
-                    class="font-medium text-neutral-900 underline dark:text-white"
+                    class="font-medium text-neutral-900 underline"
                     href="{{ route('register') }}"
                 >{{ __('Sign up') }}</a>
             </div>

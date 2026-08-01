@@ -19,11 +19,11 @@
 
             <div class="flex flex-col gap-2">
                 <label
-                    class="text-sm font-medium text-neutral-700 dark:text-neutral-300"
+                    class="text-sm font-medium text-neutral-700"
                     for="name"
                 >{{ __('Name') }}</label>
                 <input
-                    class="focus:outline-hidden w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-neutral-500 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white"
+                    class="focus:outline-hidden w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-neutral-500"
                     id="name"
                     name="name"
                     type="text"
@@ -40,11 +40,11 @@
 
             <div class="flex flex-col gap-2">
                 <label
-                    class="text-sm font-medium text-neutral-700 dark:text-neutral-300"
+                    class="text-sm font-medium text-neutral-700"
                     for="email"
                 >{{ __('Email address') }}</label>
                 <input
-                    class="focus:outline-hidden w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-neutral-500 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white"
+                    class="focus:outline-hidden w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-neutral-500"
                     id="email"
                     name="email"
                     type="email"
@@ -60,11 +60,11 @@
 
             <div class="flex flex-col gap-2">
                 <label
-                    class="text-sm font-medium text-neutral-700 dark:text-neutral-300"
+                    class="text-sm font-medium text-neutral-700"
                     for="password"
                 >{{ __('Password') }}</label>
                 <input
-                    class="focus:outline-hidden w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-neutral-500 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white"
+                    class="focus:outline-hidden w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-neutral-500"
                     id="password"
                     name="password"
                     type="password"
@@ -79,11 +79,11 @@
 
             <div class="flex flex-col gap-2">
                 <label
-                    class="text-sm font-medium text-neutral-700 dark:text-neutral-300"
+                    class="text-sm font-medium text-neutral-700"
                     for="password_confirmation"
                 >{{ __('Confirm password') }}</label>
                 <input
-                    class="focus:outline-hidden w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-neutral-500 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white"
+                    class="focus:outline-hidden w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-neutral-500"
                     id="password_confirmation"
                     name="password_confirmation"
                     type="password"
@@ -94,7 +94,7 @@
             </div>
 
             <button
-                class="w-full rounded-lg bg-neutral-900 px-4 py-2 text-sm font-semibold text-white hover:bg-neutral-700 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+                class="w-full rounded-lg bg-neutral-900 px-4 py-2 text-sm font-semibold text-white hover:bg-neutral-700"
                 data-test="register-button"
                 type="submit"
             >
@@ -102,10 +102,10 @@
             </button>
         </form>
 
-        <div class="text-center text-sm text-neutral-600 dark:text-neutral-400">
+        <div class="text-center text-sm text-neutral-600">
             <span>{{ __('Already have an account?') }}</span>
             <a
-                class="font-medium text-neutral-900 underline dark:text-white"
+                class="font-medium text-neutral-900 underline"
                 href="{{ route('login') }}"
             >{{ __('Log in') }}</a>
         </div>

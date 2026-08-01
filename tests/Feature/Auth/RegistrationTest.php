@@ -2,21 +2,36 @@
 
 declare(strict_types=1);
 
-test('registration screen can be rendered', function () {
-    $response = $this->get('/register');
+namespace Tests\Feature\Auth;
 
-    $response->assertStatus(200);
-});
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
-test('new users can register', function () {
-    $response = $this->post('/register', [
-        'name' => 'Test User',
-        'email' => 'test@example.com',
-        'password' => 'password',
-        'password_confirmation' => 'password',
-    ]);
+class RegistrationTest extends TestCase
+{
+    use LazilyRefreshDatabase;
 
-    $response->assertRedirect(route('home', absolute: false));
+    #[Test]
+    public function registration_screen_can_be_rendered(): void
+    {
+        $response = $this->get('/register');
 
-    $this->assertAuthenticated();
-});
+        $response->assertStatus(200);
+    }
+
+    #[Test]
+    public function new_users_can_register(): void
+    {
+        $response = $this->post('/register', [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $response->assertRedirect(route('home', absolute: false));
+
+        $this->assertAuthenticated();
+    }
+}

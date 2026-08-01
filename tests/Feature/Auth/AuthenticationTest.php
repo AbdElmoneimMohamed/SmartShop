@@ -2,46 +2,64 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
+namespace Tests\Feature\Auth;
 
-test('login screen can be rendered', function () {
-    $response = $this->get('/login');
+use App\Modules\Auth\Models\User;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
-    $response->assertOk();
-});
+class AuthenticationTest extends TestCase
+{
+    use LazilyRefreshDatabase;
 
-test('users can authenticate using the login screen', function () {
-    $user = User::factory()->create();
+    #[Test]
+    public function login_screen_can_be_rendered(): void
+    {
+        $response = $this->get('/login');
 
-    $response = $this->post('/login', [
-        'email' => $user->email,
-        'password' => 'password',
-    ]);
+        $response->assertOk();
+    }
 
-    $response->assertRedirect(route('home', absolute: false));
+    #[Test]
+    public function users_can_authenticate_using_the_login_screen(): void
+    {
+        $user = User::factory()->create();
 
-    $this->assertAuthenticated();
-});
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
 
-test('users can not authenticate with invalid password', function () {
-    $user = User::factory()->create();
+        $response->assertRedirect(route('home', absolute: false));
 
-    $response = $this->post('/login', [
-        'email' => $user->email,
-        'password' => 'wrong-password',
-    ]);
+        $this->assertAuthenticated();
+    }
 
-    $response->assertSessionHasErrors('email');
+    #[Test]
+    public function users_can_not_authenticate_with_invalid_password(): void
+    {
+        $user = User::factory()->create();
 
-    $this->assertGuest();
-});
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'wrong-password',
+        ]);
 
-test('users can logout', function () {
-    $user = User::factory()->create();
+        $response->assertSessionHasErrors('email');
 
-    $response = $this->actingAs($user)->post('/logout');
+        $this->assertGuest();
+    }
 
-    $response->assertRedirect('/');
+    #[Test]
+    public function users_can_logout(): void
+    {
+        $user = User::factory()->create();
 
-    $this->assertGuest();
-});
+        $response = $this->actingAs($user)->post('/logout');
+
+        $response->assertRedirect('/');
+
+        $this->assertGuest();
+    }
+}
